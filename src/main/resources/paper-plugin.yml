@@ -1,0 +1,4 @@
+name: qLodestones
+version: '${project.version}'
+main: gg.quartzdev.qlodestones.qLodestones
+api-version: '1.20'
