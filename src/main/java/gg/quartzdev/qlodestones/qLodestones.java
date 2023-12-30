@@ -7,11 +7,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class qLodestones extends JavaPlugin {
 
-    private final int BSTATS_PLUGIN_ID = 20605;
+    private final int BSTATS_PLUGIN_ID = 20606;
 
     @Override
     public void onEnable() {
         this.enableMetrics();
+        this.registerListeners();
     }
 
     @Override
