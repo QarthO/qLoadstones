@@ -4,6 +4,7 @@ import com.jeff_media.morepersistentdatatypes.DataType;
 import gg.quartzdev.qlodestones.inventory.CompassHolder;
 import gg.quartzdev.qlodestones.inventory.CompassUI;
 import gg.quartzdev.qlodestones.qLodestones;
+import gg.quartzdev.qlodestones.util.PdcUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -67,15 +68,12 @@ public class CompassEventListener implements Listener{
     }
 
     public void addLodestoneLocation(ItemStack compass, Location location){
-        CompassMeta compassMeta = (CompassMeta) compass.getItemMeta();
-        PersistentDataContainer pdc = compassMeta.getPersistentDataContainer();
-        Set<Location> storedLocations =  pdc.get(this.key, DataType.asSet(DataType.LOCATION));
-        if(storedLocations == null){
-            storedLocations = new HashSet<>();
-        }
-        storedLocations.add(location);
-        pdc.set(this.key, DataType.asSet(DataType.LOCATION), storedLocations);
-        compass.setItemMeta(compassMeta);
+        PdcUtil.saveLocation(this.key, compass, location);
+        updateLore();
+    }
+
+    public void updateLore(){
+
     }
 
 }

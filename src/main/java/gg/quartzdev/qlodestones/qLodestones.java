@@ -8,7 +8,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class qLodestones extends JavaPlugin {
 
     private final int BSTATS_PLUGIN_ID = 20606;
-
     private static qLodestones instance;
 
     public static qLodestones getInstance(){
