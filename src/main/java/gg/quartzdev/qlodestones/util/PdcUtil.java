@@ -8,43 +8,32 @@ import org.bukkit.inventory.meta.CompassMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PdcUtil {
 
-    public static @NotNull Set<Location> getStoredLocations(NamespacedKey key, ItemStack compass){
-        CompassMeta compassMeta = (CompassMeta) compass.getItemMeta();
-        Set<Location> storedLocations = compassMeta.getPersistentDataContainer()
-                .get(key, DataType.asSet(DataType.LOCATION));
+    public static @NotNull List<Location> getLocations(NamespacedKey key, CompassMeta compassMeta){
+        List<Location> storedLocations = compassMeta.getPersistentDataContainer().get(key, DataType.asList(DataType.LOCATION));
         if(storedLocations == null){
-            storedLocations = new HashSet<>();
+            storedLocations = new ArrayList<>();
         }
         return storedLocations;
     }
 
-    public static void saveLocation(NamespacedKey key, ItemStack compass, Location location){
-        CompassMeta compassMeta = (CompassMeta) compass.getItemMeta();
-        Set<Location> storedLocations = compassMeta.getPersistentDataContainer()
-                .get(key, DataType.asSet(DataType.LOCATION));
-        if(storedLocations == null){
-            storedLocations = new HashSet<>();
-        }
-        storedLocations.add(location);
-        compass.setItemMeta(compassMeta);
-
+    public static void updateLocations(NamespacedKey key, CompassMeta compassMeta, List<Location> storedLocations){
+        compassMeta.getPersistentDataContainer().set(key, DataType.asList(DataType.LOCATION), storedLocations);
     }
 
-    public static void setLocationInUI(NamespacedKey key, ItemStack item, Location location){
+    public static void setItemLocation(NamespacedKey key, ItemStack item, Location location){
         ItemMeta itemMeta = item.getItemMeta();
         itemMeta.getPersistentDataContainer().set(key, DataType.LOCATION, location);
         item.setItemMeta(itemMeta);
     }
 
-    public static Location getLocationFromUI(NamespacedKey key, ItemStack clickedItem){
+    public static Location getItemLocation(NamespacedKey key, ItemStack clickedItem){
         ItemMeta itemMeta = clickedItem.getItemMeta();
-        Location location = itemMeta.getPersistentDataContainer().get(key, DataType.LOCATION);
-        return location;
+        return itemMeta.getPersistentDataContainer().get(key, DataType.LOCATION);
     }
 
 }

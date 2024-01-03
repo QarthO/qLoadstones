@@ -32,7 +32,7 @@ public class CompassEventListener implements Listener{
     }
 
     @EventHandler
-    public void onClick(InventoryClickEvent event){
+    public void onInventoryClick(InventoryClickEvent event){
         if(!(event.getInventory().getHolder() instanceof CompassHolder)){
             return;
         }
@@ -47,32 +47,38 @@ public class CompassEventListener implements Listener{
         }
 
         ItemStack compass = event.getItem();
-        Player player = event.getPlayer();
-        if(compass == null){
-            return;
-        }
-        if(compass.getType() != Material.COMPASS){
+        if(compass == null || compass.getType() != Material.COMPASS){
             return;
         }
 
+        Player player = event.getPlayer();
         Block lodestone = event.getClickedBlock();
+
+//        Trying to open compass
         if(lodestone == null || lodestone.getType() != Material.LODESTONE){
             this.openCompassUI(player, compass);
             return;
         }
-        this.addLodestoneLocation(compass, lodestone.getLocation());
+
+//        Clicking on lodestone
+        String msg = this.addLodestoneLocation(compass, lodestone.getLocation()) ?
+                "" : "f";
+
     }
 
     public void openCompassUI(Player player, ItemStack compass){
         new CompassUI(this.key, player, compass);
     }
 
-    public void addLodestoneLocation(ItemStack compass, Location location){
+    public boolean addLodestoneLocation(ItemStack compass, Location location){
+        Set<Location>
         PdcUtil.saveLocation(this.key, compass, location);
         updateLore();
+        return true;
     }
 
-    public void updateLore(){
+    public void updateLore(ItemStack compass){
+
 
     }
 

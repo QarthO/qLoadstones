@@ -41,7 +41,7 @@ public class CompassUI extends CompassHolder {
     }
 
     private void fill(ItemStack compass){
-        Set<Location> storedLocations = PdcUtil.getStoredLocations(this.key, compass);
+        Set<Location> storedLocations = PdcUtil.getLocations(this.key, compass);
         for(Location location : storedLocations){
             ItemStack item = this.createItem(location);
             PdcUtil.setLocationInUI(this.key, item, location);
