@@ -1,0 +1,4 @@
+name: qLodestones
+version: '1.0-ALPHA'
+main: gg.quartzdev.qlodestones.qLodestones
+api-version: '1.20'

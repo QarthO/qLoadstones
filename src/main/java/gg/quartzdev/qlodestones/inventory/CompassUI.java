@@ -41,10 +41,10 @@ public class CompassUI extends CompassHolder {
     }
 
     private void fill(ItemStack compass){
-        Set<Location> storedLocations = PdcUtil.getLocations(this.key, compass);
+        List<Location> storedLocations = PdcUtil.getLocations(this.key, (CompassMeta) compass.getItemMeta());
         for(Location location : storedLocations){
             ItemStack item = this.createItem(location);
-            PdcUtil.setLocationInUI(this.key, item, location);
+            PdcUtil.setItemLocation(this.key, item, location);
             this.getInventory().addItem(item);
         }
     }
@@ -66,9 +66,10 @@ public class CompassUI extends CompassHolder {
             }
         }
 
-        Location clickedStoredLocation = PdcUtil.getLocationFromUI(this.key, item);
+        Location clickedStoredLocation = PdcUtil.getItemLocation(this.key, item);
 
-                CompassMeta compassMeta = (CompassMeta) compass.getItemMeta();
+        CompassMeta compassMeta = (CompassMeta) compass.getItemMeta();
         compassMeta.setLodestone(clickedStoredLocation);
+        compass.setItemMeta(compassMeta);
     }
 }

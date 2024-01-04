@@ -4,7 +4,11 @@ import com.jeff_media.morepersistentdatatypes.DataType;
 import gg.quartzdev.qlodestones.inventory.CompassHolder;
 import gg.quartzdev.qlodestones.inventory.CompassUI;
 import gg.quartzdev.qlodestones.qLodestones;
+import gg.quartzdev.qlodestones.util.Messages;
+import gg.quartzdev.qlodestones.util.MsgUtil;
 import gg.quartzdev.qlodestones.util.PdcUtil;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -18,13 +22,17 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CompassMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class CompassEventListener implements Listener{
     qLodestones plugin;
     NamespacedKey key;
     String PDC_KEY = "lodestones";
+    int MAX_LOCATIONS = 9;
 
     public CompassEventListener(){
         this.plugin = qLodestones.getInstance();
@@ -47,7 +55,7 @@ public class CompassEventListener implements Listener{
         }
 
         ItemStack compass = event.getItem();
-        if(compass == null || compass.getType() != Material.COMPASS){
+        if(!isUsingCompass(compass)){
             return;
         }
 
@@ -60,26 +68,60 @@ public class CompassEventListener implements Listener{
             return;
         }
 
-//        Clicking on lodestone
-        String msg = this.addLodestoneLocation(compass, lodestone.getLocation()) ?
-                "" : "f";
+        CompassMeta compassMeta = (CompassMeta) compass.getItemMeta();
+        if(!this.addLodestone(lodestone, compassMeta)){
+            MsgUtil.send(player, Messages.ERROR_LODESTONE_ADD);
+            return;
+        }
+        MsgUtil.send(player, Messages.LODESTONE_ADD);
+        compass.setItemMeta(compassMeta);
 
+    }
+
+    private boolean isUsingCompass(ItemStack compass){
+        if(compass == null || compass.getType() != Material.COMPASS){
+            return false;
+        }
+        return true;
+
+    }
+
+    private boolean addLodestone(Block lodestone, CompassMeta compassMeta){
+
+//        Get existing lodestone locations
+        List<Location> storedLocations = PdcUtil.getLocations(this.key, compassMeta);
+        Location location = lodestone.getLocation();
+
+//        Check if lodestone location already added
+        if(storedLocations.contains(location)){
+            return false;
+        }
+
+//        Check if max locations reached
+        if(storedLocations.size() >= this.MAX_LOCATIONS){
+            return false;
+        }
+
+//        Add lodestone
+        storedLocations.add(lodestone.getLocation());
+        PdcUtil.updateLocations(this.key, compassMeta, storedLocations);
+
+//        Update lore on compass
+        this.updateLore(compassMeta, storedLocations, location);
+        return true;
     }
 
     public void openCompassUI(Player player, ItemStack compass){
         new CompassUI(this.key, player, compass);
     }
 
-    public boolean addLodestoneLocation(ItemStack compass, Location location){
-        Set<Location>
-        PdcUtil.saveLocation(this.key, compass, location);
-        updateLore();
-        return true;
-    }
-
-    public void updateLore(ItemStack compass){
-
-
+    public void updateLore(CompassMeta compassMeta, List<Location> storedLocations, Location location){
+        List<Component> lore = new ArrayList<>();
+        Component component = Component.text("Locations Save: " + storedLocations.size() + "/" + this.MAX_LOCATIONS).decoration(TextDecoration.ITALIC, false);
+        lore.add(component);
+        component = Component.text("Tracking: (" + location.blockX() + ", " + location.blockY() + ", " + location.blockZ() + ")").decoration(TextDecoration.ITALIC, false);
+        lore.add(component);
+        compassMeta.lore(lore);
     }
 
 }
