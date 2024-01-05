@@ -3,6 +3,7 @@ package gg.quartzdev.qlodestones.util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -33,15 +34,14 @@ public class MsgUtil {
     }
 
     private static Component parse(String message, boolean isConsole){
-        MiniMessage mm =MiniMessage.miniMessage();
+        MiniMessage mm = MiniMessage.miniMessage();
+        Messages msg = isConsole ? Messages.CONSOLE_PREFIX : Messages.CHAT_PREFIX;
+        return mm.deserialize(message, Placeholder.parsed("prefix", msg.get()));
+    }
 
-        if(isConsole)
-            return mm.deserialize(message,
-                    Placeholder.parsed("prefix", Messages.CONSOLE_PREFIX.get())
-            );
-        return mm.deserialize(message,
-                Placeholder.parsed("prefix", Messages.CHAT_PREFIX.get())
-        );
+    @SuppressWarnings("UnstableApiUsage")
+    public static String location(Location location){
+        return location.blockX() + ", " + location.blockY() + ", " + location.blockZ();
     }
 
 }

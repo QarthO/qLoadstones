@@ -13,6 +13,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
+import org.bukkit.block.CreatureSpawner;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -73,7 +75,8 @@ public class CompassEventListener implements Listener{
             MsgUtil.send(player, Messages.ERROR_LODESTONE_ADD);
             return;
         }
-        MsgUtil.send(player, Messages.LODESTONE_ADD);
+
+        MsgUtil.send(player, Messages.LODESTONE_ADD.parse("location", MsgUtil.location(lodestone.getLocation())));
         compass.setItemMeta(compassMeta);
 
     }
