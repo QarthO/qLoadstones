@@ -7,24 +7,24 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class MsgUtil {
+public class Sender {
 
-    public static void send(CommandSender sender, String message){
+    public static void message(CommandSender sender, String message){
         if(sender instanceof Player)
             sender.sendMessage(parse(message, false));
         else
             sender.sendMessage(parse(message, true));
     }
 
-    public static void send(CommandSender sender, Messages message){
-        send(sender, message.get());
+    public static void message(CommandSender sender, Messages message){
+        message(sender, message.get());
     }
 
-    public static void send(Player player, Messages message){
-        send(player, message.get());
+    public static void message(Player player, Messages message){
+        message(player, message.get());
     }
 
-    public static void send(Player player, String message){
+    public static void message(Player player, String message){
         player.sendMessage(parse(message, false));
 
     }

@@ -1,0 +1,17 @@
+##############################################################
+# +--------------------------------------------------------+ #
+# |                   qLodestones Config                   | #
+# |   Source:   https://github.com/QarthO/qLodestones/     | #
+# |   Download: https://modrinth.com/plugin/qLodestones/   | #
+# |   Donate:   https://quartzdev.gg/donate/               | #
+# +--------------------------------------------------------+ #
+##############################################################
+
+# Don't touch this
+schema-version: 1.0.0
+check-updates: true
+
+# 'qlodestones.add'
+# 'qlodestones.use'
+requires-permission: true
+

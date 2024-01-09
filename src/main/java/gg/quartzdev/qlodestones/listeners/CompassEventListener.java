@@ -1,11 +1,10 @@
 package gg.quartzdev.qlodestones.listeners;
 
-import com.jeff_media.morepersistentdatatypes.DataType;
 import gg.quartzdev.qlodestones.inventory.CompassHolder;
 import gg.quartzdev.qlodestones.inventory.CompassUI;
 import gg.quartzdev.qlodestones.qLodestones;
 import gg.quartzdev.qlodestones.util.Messages;
-import gg.quartzdev.qlodestones.util.MsgUtil;
+import gg.quartzdev.qlodestones.util.Sender;
 import gg.quartzdev.qlodestones.util.PdcUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -13,8 +12,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
-import org.bukkit.block.CreatureSpawner;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,13 +19,9 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CompassMeta;
-import org.bukkit.persistence.PersistentDataContainer;
 
-import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class CompassEventListener implements Listener{
     qLodestones plugin;
@@ -72,11 +65,11 @@ public class CompassEventListener implements Listener{
 
         CompassMeta compassMeta = (CompassMeta) compass.getItemMeta();
         if(!this.addLodestone(lodestone, compassMeta)){
-            MsgUtil.send(player, Messages.ERROR_LODESTONE_ADD);
+            Sender.message(player, Messages.ERROR_LODESTONE_ADD);
             return;
         }
 
-        MsgUtil.send(player, Messages.LODESTONE_ADD.parse("location", MsgUtil.location(lodestone.getLocation())));
+        Sender.message(player, Messages.LODESTONE_ADD.parse("location", Sender.location(lodestone.getLocation())));
         compass.setItemMeta(compassMeta);
 
     }
